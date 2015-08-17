@@ -7,7 +7,6 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap\Tabs;
 use dpodium\filemanager\FilemanagerAsset;
-use dpodium\filemanager\models\Files;
 
 /**
  * Description of FileBrowse
@@ -76,7 +75,11 @@ class FileBrowse extends \yii\widgets\InputWidget {
         $input = $thumb = '';
 
         if ($this->model->$attribute) {
-            $file = Files::findOne([$attribute => $this->model->$attribute]);
+            $filesModel = \Yii::$app->getModule('filemanager')->models['files'];
+            $file = $filesModel::findOne([$attribute => $this->model->$attribute]);
+        }
+
+        if (isset($file) && $file) {
             $fileType = $file->mime_type;
             if ($file->dimension) {
                 $src = $file->object_url . $file->thumbnail_name;
@@ -91,19 +94,19 @@ class FileBrowse extends \yii\widgets\InputWidget {
                 'toolArray' => [['tagType' => 'i', 'options' => ['class' => 'fa-icon fa fa-times fm-remove', 'title' => Yii::t('filemanager', 'Remove')]]],
                 'thumbnailSize' => \Yii::$app->getModule('filemanager')->thumbnailSize
             ]);
+
+            foreach ($this->fileData as $attribute) {
+                $value = isset($file->$attribute) ? $file->$attribute : null;
+                $input .= Html::input('input', "Filemanager[{$attribute}]", $value);
+            }
             $thumb = $gridBox->renderGridBox();
         }
 
-        foreach ($this->fileData as $attribute) {
-            $value = isset($file->$attribute) ? $file->$attribute : null;
-            $input .= Html::input('input', "Filemanager[{$attribute}]", $value);
-        }
-
+        $fileView = Html::tag('div', $thumb, ['class' => 'fm-browse-selected-view']);
         $selectedFile = Html::activeInput('input', $this->model, $this->attribute, [
                     'class' => 'fm-browse-input',
         ]);
 
-        $fileView = Html::tag('div', $thumb, ['class' => 'fm-browse-selected-view']);
         $buttonClass = empty($this->options['class']) ? 'btn btn-primary' : $this->options['class'];
         $browseButton = Html::label('Browse', Html::getInputId($this->model, $this->attribute), [
                     'class' => 'fm-btn-browse btn-browse ' . $buttonClass,
