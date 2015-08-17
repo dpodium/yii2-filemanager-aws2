@@ -1,5 +1,5 @@
 {
-    "name": "dpodium/yii2-filemanager",
+    "name": "dpodium/yii2-filemanager-aws2",
     "type": "yii2-extension",
     "description": "A file manager for Yii2. Allow user to manage files from any location as well as browsing files within the application.",
     "keywords": ["yii2", "file", "manager", "filemanager", "browse", "widget"],
