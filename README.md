@@ -11,13 +11,13 @@ The preferred way to install this extension is through [composer](http://getcomp
 Either run
 
 ```
-php composer.phar require dpodium/yii2-filemanager "dev-master"
+php composer.phar require dpodium/yii2-filemanager-aws2 "dev-master"
 ```
 
 or add
 
 ```
-"dpodium/yii2-filemanager": "dev-master"
+"dpodium/yii2-filemanager-aws2": "dev-master"
 ```
 
 to the require section of your `composer.json` file.
