@@ -13,8 +13,8 @@
     ],
     "minimum-stability": "stable",
     "support": {
-        "source": "https://github.com/dpodium/yii2-filemanager",
-        "issues": "https://github.com/dpodium/yii2-filemanager/issues"
+        "source": "https://github.com/dpodium/yii2-filemanager-aws2",
+        "issues": "https://github.com/dpodium/yii2-filemanager-aws2/issues"
     },
     "require": {
         "php": ">=5.4.0",
