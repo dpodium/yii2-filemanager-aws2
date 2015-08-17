@@ -182,7 +182,7 @@ class FilesController extends Controller {
                 echo Json::encode(['error' => Yii::t('filemanager', 'File not found.')]);
                 \Yii::$app->end();
             }
-            
+
 
             $model->folder_id = Yii::$app->request->post('uploadTo');
             $folder = Folders::find()->select(['path', 'storage'])->where(['folder_id' => $model->folder_id])->one();
@@ -351,7 +351,7 @@ class FilesController extends Controller {
             $model->src_file_name = $model->caption . $extension;
             $model->thumbnail_name = $model->src_file_name;
             $model->file_identifier = md5($folderStorage . $model->url . '/' . $model->src_file_name);
-            
+
             if ($model->save()) {
                 return true;
             }
