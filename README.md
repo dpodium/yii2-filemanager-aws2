@@ -61,6 +61,9 @@ Upload file to AWS S3:
 ```php
 return [
 	'modules' => [
+	    'gridview' => [
+                'class' => '\kartik\grid\Module'
+            ],
             'filemanager' => [ // do not change module to other name
                 'class' => 'dpodium\filemanager\Module',
                 'storage' => [
@@ -69,7 +72,9 @@ return [
                         'secret' => 'your aws s3 secret',
                         'bucket' => '',
                         'region' => '',
-                        'proxy' => '' // add in proxy setting if required
+                        'proxy' => [
+                            'http' => '192.168.16.1:10'
+                        ]
                     ]
                 ],
                 // in mime type format
