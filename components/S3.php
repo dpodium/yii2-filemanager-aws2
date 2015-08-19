@@ -54,6 +54,7 @@ class S3 {
                 'SourceFile' => $file->tempName,
                 'ContentType' => $file->type,
                 'ACL' => 'public-read',
+                'CacheControl' => '2592000' // 30 days
             ]);
 
             $result['status'] = true;
