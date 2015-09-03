@@ -37,7 +37,6 @@ $colClass = ($uploadType == Filemanager::TYPE_MODAL) ? 'col-sm-6 col-xs-12' : 'c
             </div>
         </div>
     </div>
-    </div>
     <?php if ($uploadType == Filemanager::TYPE_MODAL) { ?>
         <div class="fm-file-info-loading col-sm-6 col-xs-12 hidden-xs">
             <div class="fm-loading hide">
@@ -48,7 +47,6 @@ $colClass = ($uploadType == Filemanager::TYPE_MODAL) ? 'col-sm-6 col-xs-12' : 'c
             <div class="fm-file-info">
                 <h2 style="text-align: center;"><?php echo Yii::t('filemanager', 'Click a file to view info.'); ?></h2>
             </div>
-        </div>
         </div>
     <?php } ?>
 </div>
