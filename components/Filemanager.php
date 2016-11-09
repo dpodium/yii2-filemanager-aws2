@@ -25,8 +25,7 @@ class Filemanager {
         $thumbnailSize = \Yii::$app->getModule('filemanager')->thumbnailSize;
         
         if ($fileType == 'image') {
-            $options = (!empty($height) && !empty($width)) ? ['height' => $height, 'width' => $width] : ['height' => "{$thumbnailSize[1]}px", 'width' => "{$thumbnailSize[0]}px"];
-            return Html::img($src, $options);
+            return Html::img($src);
         }
 
         $availableThumbnail = ['archive', 'audio', 'code', 'excel', 'movie', 'pdf', 'powerpoint', 'text', 'video', 'word', 'zip'];
@@ -72,11 +71,16 @@ class Filemanager {
                 $file['info'][$attribute] = $value;
             }
 
-            $src = $fileObject->object_url . $fileObject->src_file_name;
-            if ($thumbnail && !is_null($fileObject->dimension)) {
-                $src = $fileObject->object_url . $fileObject->thumbnail_name;
+            $domain = $fileObject->object_url;
+            if (isset($module->storage['s3']['cdnDomain']) && !empty($module->storage['s3']['cdnDomain'])) {
+                $domain = $module->storage['s3']['cdnDomain'] . "/{$fileObject->storage_id}/{$fileObject->url}/";
             }
-
+            $src = $file['img_src'] = $domain . $fileObject->src_file_name;
+            $file['img_thumb_src'] = $domain . $fileObject->thumbnail_name;
+            if ($thumbnail && !is_null($fileObject->dimension)) {
+                $src = $domain . $fileObject->thumbnail_name;
+            }
+            
             if (!is_null($fileObject->dimension)) {
                 $file['img'] = Html::img($src);
             }
