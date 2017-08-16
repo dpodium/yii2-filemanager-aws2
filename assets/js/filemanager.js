@@ -67,11 +67,12 @@ var gridBox = function () {
         });
 
         jQuery(document).on('click', '.tool-box .fm-remove', function () {
-            var inputId = $browse.element.find(".fm-btn-browse").attr('for');
-            $browse.element.removeClass('attached');
-            $browse.element.find('.fm-browse-selected-view').html('');
-            $browse.element.find('#' + inputId).val('');
-            $browse.element.find('#' + inputId).blur();
+            var $browse_selected = jQuery(this).closest('.fm-browse-selected');
+            var inputId = $browse_selected.find(".fm-btn-browse").attr('for');
+            $browse_selected.removeClass('attached');
+            $browse_selected.find('.fm-browse-selected-view').html('');
+            $browse_selected.find('#' + inputId).val('');
+            $browse_selected.find('#' + inputId).blur();
         });
 
         jQuery(document).on('click', '.fm-section-item', function (e) {
@@ -84,7 +85,7 @@ var gridBox = function () {
             }
         });
 
-        jQuery('.tool-box .fm-delete').click(function () {
+        jQuery(document).on('click', '.tool-box .fm-delete', function () {
             if (confirmDelete) {
                 var libraryTabId = jQuery('#fm-library-tab').attr('href');
                 jQuery(libraryTabId).html('<div class="fm-loading"><i class="fa fa-spinner fa-pulse"></i></div>');
@@ -101,7 +102,7 @@ var gridBox = function () {
     var FilemanagerModal = $('#fm-modal');
 
     var FilemanagerBrowse = function (element, options) {
-        var self = $browse = this;
+        var self = this;
         self.element = $(element);
         self.multiple = options.multiple;
         self.maxFileCount = options.maxFileCount;
@@ -110,6 +111,7 @@ var gridBox = function () {
         self.element.find(".fm-btn-browse").on('click', function (e) {
             e.preventDefault();
             self.renderTabContent('#fm-library-tab');
+            $browse = self;
         });
 
         FilemanagerModal.find("#fm-library-tab").on('click', function (e) {
