@@ -48,13 +48,15 @@ class S3 {
         $result['status'] = false;
 
         try {
+            $prefixPath = isset(\Yii::$app->getModule('filemanager')->storage['s3']['prefixPath']) ? \Yii::$app->getModule('filemanager')->storage['s3']['prefixPath'] . '/' : '';
+            
             $uploadResult = $this->s3->putObject([
                 'Bucket' => $this->bucket,
-                'Key' => $path . '/' . $fileName,
+                'Key' => $prefixPath . $path . '/' . $fileName,
                 'SourceFile' => $file->tempName,
                 'ContentType' => $file->type,
                 'ACL' => 'public-read',
-                'CacheControl' => '2592000' // 30 days
+                'CacheControl' => 'max-age=2592000' // 30 days
             ]);
 
             $result['status'] = true;
@@ -71,13 +73,15 @@ class S3 {
         $result['status'] = false;
 
         try {
+            $prefixPath = isset(\Yii::$app->getModule('filemanager')->storage['s3']['prefixPath']) ? \Yii::$app->getModule('filemanager')->storage['s3']['prefixPath'] . '/' : '';
+
             $uploadResult = $this->s3->putObject([
                 'Body' => $file,
                 'Bucket' => $this->bucket,
-                'Key' => $path . '/' . $fileName,
+                'Key' => $prefixPath . $path . '/' . $fileName,
                 'ContentType' => $fileType,
                 'ACL' => 'public-read',
-                'CacheControl' => '2592000' // 30 days
+                'CacheControl' => 'max-age=2592000' // 30 days
             ]);
 
             $result['status'] = true;
