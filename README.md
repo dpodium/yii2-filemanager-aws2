@@ -92,8 +92,8 @@ return [
                         'bucket' => '',
                         'region' => '',
                         'proxy' => '192.168.16.1:10',
-                        'prefixPath' => ''
-                    ]
+                        'prefixPath' => '',
+                        'cacheTime' => '2592000',                    ]
                 ],
                 // in mime type format
                 'acceptedFilesType' => [
