@@ -234,12 +234,14 @@ class FilesController extends Controller {
                 }
             }
             $model->mime_type = $file[0]->type;
+            $prefixPath = !empty(\Yii::$app->getModule('filemanager')->storage['s3']['prefixPath']) ? \Yii::$app->getModule('filemanager')->storage['s3']['prefixPath'] . '/' : '';
 
-            $model->url = $folder->path;
+            $model->url =  $prefixPath . $folder->path; 
+            //$model->url = $folder->path;
 
             $uploadResult = ['status' => true, 'error_msg' => ''];
             $transaction = \Yii::$app->db->beginTransaction();
-            if (isset($this->module->storage['s3'])) {
+            if (isset($this->module->storage['s3'])) {               
                 $model->object_url = '/';
                 $model->host = isset($this->module->storage['s3']['host']) ? $this->module->storage['s3']['host'] : null;
                 $model->storage_id = $this->module->storage['s3']['bucket'];
@@ -442,8 +444,8 @@ class FilesController extends Controller {
                 'error_msg' => Yii::t('filemanager', 'Upload fail due to some reasons.')
             ];
         }
-        
-        //Remove filename name from object URL
+
+        //Remove filename name from object URL    
         $model->object_url = substr($result['objectUrl'], 0, strrpos( $result['objectUrl'], '/'));
         $model->object_url = $model->object_url . '/';
         

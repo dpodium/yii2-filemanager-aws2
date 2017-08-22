@@ -48,12 +48,11 @@ class S3 {
         $result['status'] = false;
 
         try {
-            $prefixPath = isset(\Yii::$app->getModule('filemanager')->storage['s3']['prefixPath']) ? \Yii::$app->getModule('filemanager')->storage['s3']['prefixPath'] . '/' : '';
             $cacheTime = \Yii::$app->getModule('filemanager')->storage['s3']['cacheTime'];
             
             $uploadResult = $this->s3->putObject([
                 'Bucket' => $this->bucket,
-                'Key' => $prefixPath . $path . '/' . $fileName,
+                'Key' => $path . '/' . $fileName,
                 'SourceFile' => $file->tempName,
                 'ContentType' => $file->type,
                 'ACL' => 'public-read',
@@ -63,6 +62,8 @@ class S3 {
             $result['status'] = true;
             $result['objectUrl'] = $uploadResult['ObjectURL'];
             $result['uploadResult'] = $uploadResult;
+            
+
         } catch (S3Exception $e) {
             echo $e . "\nThere was an error uploading the file.\n";
         }
@@ -74,13 +75,12 @@ class S3 {
         $result['status'] = false;
 
         try {
-            $prefixPath = isset(\Yii::$app->getModule('filemanager')->storage['s3']['prefixPath']) ? \Yii::$app->getModule('filemanager')->storage['s3']['prefixPath'] . '/' : '';
             $cacheTime = \Yii::$app->getModule('filemanager')->storage['s3']['cacheTime'];
             
             $uploadResult = $this->s3->putObject([
                 'Body' => $file,
                 'Bucket' => $this->bucket,
-                'Key' => $prefixPath . $path . '/' . $fileName,
+                'Key' => $path . '/' . $fileName,
                 'ContentType' => $fileType,
                 'ACL' => 'public-read',
                 'CacheControl' => 'max-age='.$cacheTime, 

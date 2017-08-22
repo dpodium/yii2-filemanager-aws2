@@ -93,7 +93,7 @@ return [
                         'region' => '',
                         'proxy' => '192.168.16.1:10',
                         'prefixPath' => '',
-                        'cacheTime' => '2592000',                    ]
+                        'cacheTime' => '2592000',    //30 Days                ]
                 ],
                 // in mime type format
                 'acceptedFilesType' => [
