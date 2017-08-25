@@ -154,8 +154,8 @@ class FilesController extends Controller {
 
         if (isset($this->module->storage['s3'])) {
             $files = [
-                ['Key' => $model->url . '/' . $model->src_file_name],
-                ['Key' => $model->url . '/' . $model->thumbnail_name],
+                    ['Key' => $model->url . '/' . $model->src_file_name],
+                    ['Key' => $model->url . '/' . $model->thumbnail_name],
             ];
 
             $s3 = new S3();
@@ -213,6 +213,13 @@ class FilesController extends Controller {
             }
 
             $model->upload_file = $file[0];
+            $extension = '.' . $file[0]->getExtension();
+            $file[0]->name = substr($file[0]->name, 0, (strlen($file[0]->name) - strlen($extension)));
+            if (preg_match('/^[-0-9\p{L}\p{Nd}\p{M}]+$/u', $file[0]->name) === 0) {
+                $file[0]->name = preg_replace('~[\p{P}\p{S}]~u', '-', $file[0]->name);
+                $file[0]->name = preg_replace('/[-]+/', '-', $file[0]->name);
+            }
+            $file[0]->name = $file[0]->name . $extension;
             $model->filename = $file[0]->name;
             list($width, $height) = getimagesize($file[0]->tempName);
             $model->dimension = ($width && $height) ? $width . 'X' . $height : null;
@@ -222,12 +229,10 @@ class FilesController extends Controller {
                     echo Json::encode(['error' => Yii::t('filemanager', 'File dimension at most 2272 X 1704.')]);
                     \Yii::$app->end();
                 }
-            }
+            }            
             $model->mime_type = $file[0]->type;
-
-            $model->url = $folder->path;
-            $extension = '.' . $file[0]->getExtension();
-
+            $prefixPath = !empty(\Yii::$app->getModule('filemanager')->storage['s3']['prefixPath']) ? \Yii::$app->getModule('filemanager')->storage['s3']['prefixPath'] . '/' : '';
+            $model->url = $prefixPath . $folder->path;
             $uploadResult = ['status' => true, 'error_msg' => ''];
             $transaction = \Yii::$app->db->beginTransaction();
             if (isset($this->module->storage['s3'])) {
@@ -345,7 +350,7 @@ class FilesController extends Controller {
         }
 
         $toolArray = [
-            ['tagType' => 'i', 'options' => ['class' => 'fa-icon fa fa-times fm-remove', 'title' => \Yii::t('filemanager', 'Remove')]]
+                ['tagType' => 'i', 'options' => ['class' => 'fa-icon fa fa-times fm-remove', 'title' => \Yii::t('filemanager', 'Remove')]]
         ];
         $gridBox = new \dpodium\filemanager\components\GridBox([
             'src' => $src,
@@ -434,7 +439,11 @@ class FilesController extends Controller {
             ];
         }
 
-        $model->object_url = str_replace($model->src_file_name, '', $result['objectUrl']);
+        //Remove filename name from object URL    
+        $model->object_url = substr($result['objectUrl'], 0, strrpos($result['objectUrl'], '/'));
+        $model->object_url = $model->object_url . '/';
+
+        //$model->object_url = str_replace($model->src_file_name, '', $result['objectUrl']);
         $uploadThumbResult = ['status' => true, 'error_msg' => ''];
         if ($model->dimension) {
             $thumbnailSize = $this->module->thumbnailSize;

@@ -91,7 +91,9 @@ return [
                         'secret' => 'your aws s3 secret',
                         'bucket' => '',
                         'region' => '',
-                        'proxy' => '192.168.16.1:10'
+                        'proxy' => '192.168.16.1:10',
+                        'prefixPath' => '',
+                        'cacheTime' => '2592000', //30 Days
                     ]
                 ],
                 // in mime type format

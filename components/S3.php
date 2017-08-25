@@ -48,13 +48,14 @@ class S3 {
         $result['status'] = false;
 
         try {
+            $cacheTime = !empty(\Yii::$app->getModule('filemanager')->storage['s3']['cacheTime']) ? \Yii::$app->getModule('filemanager')->storage['s3']['cacheTime'] : '2592000';
             $uploadResult = $this->s3->putObject([
                 'Bucket' => $this->bucket,
                 'Key' => $path . '/' . $fileName,
                 'SourceFile' => $file->tempName,
                 'ContentType' => $file->type,
                 'ACL' => 'public-read',
-                'CacheControl' => '2592000' // 30 days
+                'CacheControl' => 'max-age=' . $cacheTime,
             ]);
 
             $result['status'] = true;
@@ -71,13 +72,14 @@ class S3 {
         $result['status'] = false;
 
         try {
+            $cacheTime = !empty(\Yii::$app->getModule('filemanager')->storage['s3']['cacheTime']) ? \Yii::$app->getModule('filemanager')->storage['s3']['cacheTime'] : '2592000';
             $uploadResult = $this->s3->putObject([
                 'Body' => $file,
                 'Bucket' => $this->bucket,
                 'Key' => $path . '/' . $fileName,
                 'ContentType' => $fileType,
                 'ACL' => 'public-read',
-                'CacheControl' => '2592000' // 30 days
+                'CacheControl' => 'max-age=' . $cacheTime,
             ]);
 
             $result['status'] = true;
@@ -93,7 +95,7 @@ class S3 {
     public function delete($files) {
         $result['status'] = false;
         $objects = [];
-        
+
         foreach ($files as $fileKey) {
             $objects[] = $fileKey;
         }
@@ -120,7 +122,7 @@ class S3 {
         foreach ($iterator as $object) {
             $result[] = $object['Key'];
         }
-        
+
         return $result;
     }
 

@@ -85,7 +85,7 @@ class Files extends \yii\db\ActiveRecord {
             ],
             // validate src_file_name
             // /^[a-zA-Z0-9_-]+$/
-            ['filename', 'match', 'pattern' => '/^[a-zA-Z0-9_-]+$/', 'message' => Yii::t('filemanager', 'Filename can only contain alphanumeric characters, underscores and dashes.')]
+            ['filename', 'match', 'pattern' => '/^[-0-9\p{L}\p{Nd}\p{M}]+$/u', 'message' => Yii::t('filemanager', 'Filename can only contain alphanumeric characters and dashes.')]
         ];
     }
 
@@ -134,9 +134,9 @@ class Files extends \yii\db\ActiveRecord {
     public function getFileUrl($thumbnail = false) {
         $domain = $this->object_url;
         if ($thumbnail) {
-            return $domain . $this->thumbnail_name;
+            return $domain . $this->thumbnail_name . '?' . $this->updated_at;
         }
-        return $domain . $this->src_file_name;
+        return $domain . $this->src_file_name . '?' . $this->updated_at;
     }
 
 }

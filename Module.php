@@ -22,7 +22,9 @@ class Module extends \yii\base\Module {
      *          'key' => '',
      *          'secret' => '',
      *          'bucket' => '',
-     *          'cdnDomain' => ''
+     *          'cdnDomain' => '',
+     *          'prefixPath' => '',
+     *          'cacheTime' => ''
      *      ]
      * ];
      */
